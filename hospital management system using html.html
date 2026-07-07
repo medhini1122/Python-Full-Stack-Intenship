@@ -1,0 +1,83 @@
+from flask import Flask, render_template, request, redirect
+import sqlite3
+
+app = Flask(__name__)
+
+# Database Connection
+def connect():
+    conn = sqlite3.connect("database.db")
+    return conn
+
+# Home Page - Display Patients
+@app.route("/")
+def home():
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM patients")
+    data = cur.fetchall()
+    conn.close()
+    return render_template("index.html", data=data)
+
+
+# Add Patient
+@app.route("/add", methods=["POST"])
+def add_patient():
+    name = request.form["name"]
+    age = request.form["age"]
+    gender = request.form["gender"]
+    disease = request.form["disease"]
+    contact = request.form["contact"]
+
+    conn = connect()
+    cur = conn.cursor()
+
+    cur.execute(
+        "INSERT INTO patients(name, age, gender, disease, contact) VALUES(?,?,?,?,?)",
+        (name, age, gender, disease, contact)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/")
+
+
+# Delete Patient
+@app.route("/delete/<int:id>")
+def delete_patient(id):
+    conn = connect()
+    cur = conn.cursor()
+
+    cur.execute("DELETE FROM patients WHERE id=?", (id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/")
+
+
+# Update Patient
+@app.route("/update/<int:id>", methods=["POST"])
+def update_patient(id):
+    name = request.form["name"]
+    age = request.form["age"]
+    gender = request.form["gender"]
+    disease = request.form["disease"]
+    contact = request.form["contact"]
+
+    conn = connect()
+    cur = conn.cursor()
+
+    cur.execute(
+        "UPDATE patients SET name=?, age=?, gender=?, disease=?, contact=? WHERE id=?",
+        (name, age, gender, disease, contact, id)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
