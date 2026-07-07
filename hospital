@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital Management System</title>
+</head>
+<body>
+
+<h1>Hospital Management System</h1>
+
+<form action="/add" method="POST">
+    <input type="text" name="name" placeholder="Name" required><br><br>
+    <input type="number" name="age" placeholder="Age" required><br><br>
+    <input type="text" name="gender" placeholder="Gender" required><br><br>
+    <input type="text" name="disease" placeholder="Disease" required><br><br>
+    <input type="text" name="phone" placeholder="Phone" required><br><br>
+    <input type="text" name="address" placeholder="Address" required><br><br>
+
+    <button type="submit">Add Patient</button>
+</form>
+
+<hr>
+
+<table border="1" cellpadding="10">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Age</th>
+<th>Gender</th>
+<th>Disease</th>
+<th>Phone</th>
+<th>Address</th>
+</tr>
+
+{% for row in data %}
+<tr>
+<td>{{row[0]}}</td>
+<td>{{row[1]}}</td>
+<td>{{row[2]}}</td>
+<td>{{row[3]}}</td>
+<td>{{row[4]}}</td>
+<td>{{row[5]}}</td>
+<td>{{row[6]}}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
